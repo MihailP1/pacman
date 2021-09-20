@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/pacman/static/css/main.5739ad41.chunk.css",
+    "main.js": "/pacman/static/js/main.9539f4c8.chunk.js",
+    "main.js.map": "/pacman/static/js/main.9539f4c8.chunk.js.map",
+    "runtime-main.js": "/pacman/static/js/runtime-main.fb1893c7.js",
+    "runtime-main.js.map": "/pacman/static/js/runtime-main.fb1893c7.js.map",
+    "static/js/2.159de1e8.chunk.js": "/pacman/static/js/2.159de1e8.chunk.js",
+    "static/js/2.159de1e8.chunk.js.map": "/pacman/static/js/2.159de1e8.chunk.js.map",
+    "static/js/3.a26efb1c.chunk.js": "/pacman/static/js/3.a26efb1c.chunk.js",
+    "static/js/3.a26efb1c.chunk.js.map": "/pacman/static/js/3.a26efb1c.chunk.js.map",
+    "index.html": "/pacman/index.html",
+    "static/css/main.5739ad41.chunk.css.map": "/pacman/static/css/main.5739ad41.chunk.css.map",
+    "static/js/2.159de1e8.chunk.js.LICENSE.txt": "/pacman/static/js/2.159de1e8.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/pacman/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fb1893c7.js",
+    "static/js/2.159de1e8.chunk.js",
+    "static/css/main.5739ad41.chunk.css",
+    "static/js/main.9539f4c8.chunk.js"
+  ]
+}
