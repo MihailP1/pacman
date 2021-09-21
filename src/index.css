@@ -28,6 +28,10 @@ body {
 .wall {
   background-color: blue;
 }
+.pac-man {
+  background-color: yellow;
+  border-radius: 10px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
