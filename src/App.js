@@ -14,102 +14,110 @@ function App() {
 
 function Game(){
 
-  const [pacmanIndexes, setPacmanIndex] = useState([null,490]);
-  
+  const [pacmanIndexes, setPacmanIndex] = useState(490);
+  const [prevIndex, setPrevindex] = useState(490);
   const [squares, setSquares] = useState([]);
-  
-
-  function action() {
-    const board = squares;
-    const prevSquare = pacmanIndexes[0];
-    const currentSquare = pacmanIndexes[1];
-    board[prevSquare] = <div key={currentSquare}></div>;
-    board[currentSquare] = <div className="pac-man" key="pacman"></div>;
-    console.log("action");
-    console.log(board);
-    setSquares(board);
-  }
-  
-
-  function movePacman(e) {
-    
-    console.log("key");
-    const width = 28;
-    switch(e.keyCode){
-      case 37:
-        console.log(pacmanIndexes);
-        setPacmanIndex(1);
-        
-        break;
-      case 38:
-        console.log(pacmanIndexes);
-        setPacmanIndex(2);
-        
-        break;
-      case 39:
-        console.log(pacmanIndexes);
-        setPacmanIndex(3);
-        
-        break;
-      case 40:
-        console.log(pacmanIndexes);
-        setPacmanIndex(4);
-        
-        break;
-    }
-    
-
-  }
+  const [start, setStart] = useState("prestart");
+  const [layout, setLayout] = useState([]);
+  const [count, setCount] = useState(0);
   
   useEffect(() => {
-    
     function createLayout(num) {
-      const layout =[];
+      const lay =[];
       for(let i=0; i < num; i++){
-        layout.push(0);
+        lay.push(0);
+        
+      }    
+      return lay;  
+    }
+
+    setLayout(createLayout(784));
+    setStart(false);
+  }, []);
+
+
+  useEffect(() => {
+    if(start === false){
+      
+
+      function createBoard() {
+        const board = [];
+        console.log(layout);
+        for(let i=0; i < layout.length; i++){
+          if(layout[i] === 0) {
+            board.push(<div className="pac-dot" key={i}></div>)
+          } else if (layout[i] === 1) {
+            board.push(<div className="wall" key={i}></div>)
+          } else if (layout[i] === 3) {
+            board.push(<div className="power-pellet" key={i}></div>)
+          }   
+        }
+        console.log(board);
+        board[pacmanIndexes] = <div className="pac-man" key="pacman"></div>;
+        console.log("create board");
+        
+        return board;
+
+      }
+
+      setSquares(createBoard());
+      
+      setStart(true);
+
+
+    } 
+    
+  });
+  
+
+ 
+ 
+
+  useEffect(() => {
+    if(start){
+    console.log("add event");
+    console.log("prev=" + prevIndex + ",current=" + pacmanIndexes);
+    console.log("count:"+count);
+    document.addEventListener("keyup", movePacman);
+
+    function movePacman(e) {
+      console.log("pacman move");
+      const width = 28;
+      if (e.keyCode === 37){  
+        setPrevindex(pacmanIndexes);
+        
+        setPacmanIndex(pacmanIndexes-1);
+        setCount(count + 1);
+        
+        
+      } else if (e.keyCode === 38){
+        setPrevindex(pacmanIndexes);
+        console.log("set prev index"+prevIndex);
+        setPacmanIndex(pacmanIndexes-width);
+        console.log("set current index" + pacmanIndexes);
+        
+      } else if (e.keyCode === 39){
+        setPrevindex(pacmanIndexes);
+        console.log("set prev index"+prevIndex);
+        setPacmanIndex(pacmanIndexes+1);
+        console.log("set current index" + pacmanIndexes);
+        
+      } else if (e.keyCode === 40){
+        setPrevindex(pacmanIndexes);
+        console.log("set prev index"+prevIndex);
+        setPacmanIndex(pacmanIndexes+width);
+        console.log("set current index" + pacmanIndexes);
         
       }
-      console.log(layout);
-      return layout;
       
     }
 
-    const layout = createLayout(784);
-    
-
-    function createBoard() {
-
-      const board = [];
-      for(let i=0; i < layout.length; i++){
-        if(layout[i] === 0) {
-          board.push(<div className="pac-dot" key={i}></div>)
-        } else if (layout[i] === 1) {
-          board.push(<div className="wall" key={i}></div>)
-        } else if (layout[i] === 3) {
-          board.push(<div className="power-pellet" key={i}></div>)
-        }
-        
-      }
-      console.log(pacmanIndexes);
-      const prevSquare = pacmanIndexes[0];
-      const currentSquare = pacmanIndexes[1];
-      board[prevSquare] = <div key={currentSquare}></div>;
-      board[currentSquare] = <div className="pac-man" key="pacman"></div>;
-      console.log(board);
-  
-      return board;
     }
-    setSquares(createBoard());
-    
-  }, []);
-
- 
- 
-
-  useEffect(() => {
-    
-    document.addEventListener("keyup", movePacman);
   });
+
+  
+
+
   return (
     <div className="grid">{squares}</div>
   );
