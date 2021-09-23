@@ -36,7 +36,7 @@ function Game(){
   }, []);
 
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if(start === false){
       
 
@@ -66,8 +66,10 @@ function Game(){
 
 
     } else if(start){
+      console.log("action prev=" + prevIndex + ",current=" + pacmanIndexes);
       if(prevIndex !== pacmanIndexes){
         function action() {
+          console.log("action");
           const board = squares;
           board[prevIndex] = <div key={prevIndex}></div>;
           board[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
@@ -83,15 +85,15 @@ function Game(){
  
  
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if(start){
       console.log("add event");
-      
-      document.addEventListener("keyup", movePacman);
+      console.log("prev=" + prevIndex + ",current=" + pacmanIndexes);
+      console.log("count:"+count);
+      document.addEventListener("keydown", movePacman);
 
       function movePacman(e) {
-        console.log("prev=" + prevIndex + ",current=" + pacmanIndexes);
-        console.log("count:"+count);
+        
         console.log("pacman move");
         const width = 28;
         if (e.keyCode === 37){  
@@ -106,24 +108,24 @@ function Game(){
           console.log("set prev index"+prevIndex);
           setPacmanIndex(pacmanIndexes-width);
           console.log("set current index" + pacmanIndexes);
-          
+          setCount(count + 1);
         } else if (e.keyCode === 39){
           setPrevindex(pacmanIndexes);
           console.log("set prev index"+prevIndex);
           setPacmanIndex(pacmanIndexes+1);
           console.log("set current index" + pacmanIndexes);
-          
+          setCount(count + 1);
         } else if (e.keyCode === 40){
           setPrevindex(pacmanIndexes);
           console.log("set prev index"+prevIndex);
           setPacmanIndex(pacmanIndexes+width);
           console.log("set current index" + pacmanIndexes);
-          
+          setCount(count + 1);
         }
         
       }
       return () => {
-        document.removeEventListener("keyup", movePacman);
+        document.removeEventListener("keydown", movePacman);
       }
     }
     
