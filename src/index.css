@@ -32,6 +32,10 @@ body {
   background-color: yellow;
   border-radius: 10px;
 }
+.ghost {
+  background-color: blue;
+  border-radius: 10px;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

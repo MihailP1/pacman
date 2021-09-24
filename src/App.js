@@ -20,6 +20,7 @@ function Game(){
   const [start, setStart] = useState("prestart");
   const [layout, setLayout] = useState([]);
   const [count, setCount] = useState(0);
+  const [ghost1Index, setGhost1Index] = useState(0);
   
   useLayoutEffect(() => {
     function createLayout(num) {
@@ -53,7 +54,8 @@ function Game(){
           }   
         }
         console.log(board);
-        board[pacmanIndexes] = <div className="pac-man" key="pacman"></div>;
+        board[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
+        board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
         console.log("create board");
         
         return board;
@@ -67,13 +69,16 @@ function Game(){
 
     } else if(start){
       console.log("action prev=" + prevIndex + ",current=" + pacmanIndexes);
+      squares[ghost1Index-1] = <div key={prevIndex}></div>;
+      squares[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
+      setSquares(squares);
       if(prevIndex !== pacmanIndexes){
         function action() {
           console.log("action");
-          const board = squares;
-          board[prevIndex] = <div key={prevIndex}></div>;
-          board[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
-          setSquares(board);
+          
+          squares[prevIndex] = <div key={prevIndex}></div>;
+          squares[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
+          setSquares(squares);
         }
         action();
       }
@@ -131,6 +136,19 @@ function Game(){
     
   });
 
+  useEffect(() => {
+    if(start){
+      console.log(ghost1Index);
+      function moveGhost() {
+        setGhost1Index(ghost1Index+1);
+        setCount(count+1);
+      }
+      let timerId = setInterval(moveGhost, 1000);
+      return () => {
+        clearInterval(timerId);
+      }
+    }
+  });
   
 
 
