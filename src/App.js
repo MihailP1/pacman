@@ -14,14 +14,18 @@ function App() {
 
 function Game(){
 
-  const [pacmanIndexes, setPacmanIndex] = useState(490);
-  const [prevIndex, setPrevindex] = useState(490);
+  const [currentPacmanIndex, setPacmanIndex] = useState(490);
+  const [prevPacmanIndex, setPrevPacmanIndex] = useState(490);
   const [squares, setSquares] = useState([]);
   const [start, setStart] = useState("prestart");
   const [layout, setLayout] = useState([]);
   const [count, setCount] = useState(0);
   const [ghost1Index, setGhost1Index] = useState(0);
+  const [ghost1PrevIndex, setGhost1PrevIndex] = useState(0)
+  const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="pac-dot" key={ghost1PrevIndex}></div>);
   
+  
+
   useLayoutEffect(() => {
     function createLayout(num) {
       const lay =[];
@@ -54,7 +58,7 @@ function Game(){
           }   
         }
         console.log(board);
-        board[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
+        board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
         board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
         console.log("create board");
         
@@ -68,16 +72,18 @@ function Game(){
 
 
     } else if(start){
-      console.log("action prev=" + prevIndex + ",current=" + pacmanIndexes);
-      squares[ghost1Index-1] = <div key={prevIndex}></div>;
+      console.log("action prev=" + prevPacmanIndex + ",current=" + currentPacmanIndex);
+      squares[ghost1PrevIndex] = ghost1PrevElem;
+      setGhost1PrevElem(squares[ghost1Index]);
+      setGhost1PrevIndex(ghost1Index);
       squares[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
       setSquares(squares);
-      if(prevIndex !== pacmanIndexes){
+      if(prevPacmanIndex !== currentPacmanIndex){
         function action() {
           console.log("action");
           
-          squares[prevIndex] = <div key={prevIndex}></div>;
-          squares[pacmanIndexes] = <div className="pac-man" key={pacmanIndexes}></div>;
+          squares[prevPacmanIndex] = <div key={prevPacmanIndex}></div>;
+          squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
           setSquares(squares);
         }
         action();
@@ -87,13 +93,45 @@ function Game(){
   });
   
 
- 
+  useLayoutEffect(() => {
+    if(start){
+      console.log(ghost1Index);
+      function moveGhost() {
+        const width = 28;
+        const directions = [-1, +1, width, -width];     
+        let direction = directions[Math.floor(Math.random() * directions.length)];   
+        switch(direction) {
+          case -1:
+            if (ghost1Index % width !== 0){setGhost1Index(ghost1Index + direction)}  else {setGhost1Index(ghost1Index)};
+            break;
+          case -28:
+            if(ghost1Index - width >= 0){setGhost1Index(ghost1Index + direction)}  else {setGhost1Index(ghost1Index)};
+            break;
+          case 1:
+            if (ghost1Index % width < width - 1) {setGhost1Index(ghost1Index + direction)}  else {setGhost1Index(ghost1Index)};
+            break;
+          case 28:
+            if (ghost1Index + width < width * width) {setGhost1Index(ghost1Index + direction)}  else {setGhost1Index(ghost1Index)};
+            break;
+        }
+        console.log(direction);
+        
+        
+
+        setCount(count+1);
+      }
+      let timerId = setInterval(moveGhost, 100);
+      return () => {
+        clearInterval(timerId);
+      }
+    }
+  });
  
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if(start){
       console.log("add event");
-      console.log("prev=" + prevIndex + ",current=" + pacmanIndexes);
+      console.log("prev=" + prevPacmanIndex + ",current=" + currentPacmanIndex);
       console.log("count:"+count);
       document.addEventListener("keydown", movePacman);
 
@@ -101,34 +139,46 @@ function Game(){
         
         console.log("pacman move");
         const width = 28;
-        if (e.keyCode === 37){  
-          setPrevindex(pacmanIndexes);
-          
-          setPacmanIndex(pacmanIndexes-1);
-          setCount(count + 1);
-          
-          
-        } else if (e.keyCode === 38){
-          setPrevindex(pacmanIndexes);
-          console.log("set prev index"+prevIndex);
-          setPacmanIndex(pacmanIndexes-width);
-          console.log("set current index" + pacmanIndexes);
-          setCount(count + 1);
-        } else if (e.keyCode === 39){
-          setPrevindex(pacmanIndexes);
-          console.log("set prev index"+prevIndex);
-          setPacmanIndex(pacmanIndexes+1);
-          console.log("set current index" + pacmanIndexes);
-          setCount(count + 1);
-        } else if (e.keyCode === 40){
-          setPrevindex(pacmanIndexes);
-          console.log("set prev index"+prevIndex);
-          setPacmanIndex(pacmanIndexes+width);
-          console.log("set current index" + pacmanIndexes);
-          setCount(count + 1);
-        }
-        
+
+        switch(e.keyCode) {
+          case 37:
+            if(currentPacmanIndex % width !== 0){
+              setPrevPacmanIndex(currentPacmanIndex);         
+              setPacmanIndex(currentPacmanIndex-1);
+              setCount(count + 1);
+            }
+            break;
+          case 38:
+            if(currentPacmanIndex - width > 0){
+              setPrevPacmanIndex(currentPacmanIndex);
+              console.log("set prev index"+prevPacmanIndex);
+              setPacmanIndex(currentPacmanIndex-width);
+              console.log("set current index" + currentPacmanIndex);
+              setCount(count + 1);
+            }
+            break;
+          case 39:
+            if(currentPacmanIndex % width < width - 1){
+              setPrevPacmanIndex(currentPacmanIndex);
+              console.log("set prev index"+prevPacmanIndex);
+              setPacmanIndex(currentPacmanIndex+1);
+              console.log("set current index" + currentPacmanIndex);
+              setCount(count + 1);
+            }
+            break;
+          case 40:
+            if(currentPacmanIndex + width < width * width){
+              setPrevPacmanIndex(currentPacmanIndex);
+              console.log("set prev index"+prevPacmanIndex);
+              setPacmanIndex(currentPacmanIndex+width);
+              console.log("set current index" + currentPacmanIndex);
+              setCount(count + 1);
+            }
+            break;
+        }   
       }
+
+
       return () => {
         document.removeEventListener("keydown", movePacman);
       }
@@ -136,19 +186,7 @@ function Game(){
     
   });
 
-  useEffect(() => {
-    if(start){
-      console.log(ghost1Index);
-      function moveGhost() {
-        setGhost1Index(ghost1Index+1);
-        setCount(count+1);
-      }
-      let timerId = setInterval(moveGhost, 1000);
-      return () => {
-        clearInterval(timerId);
-      }
-    }
-  });
+  
   
 
 
