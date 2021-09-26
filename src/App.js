@@ -24,7 +24,9 @@ function Game(){
   const [ghost1Index, setGhost1Index] = useState(300);
   const [ghost1PrevIndex, setGhost1PrevIndex] = useState(300)
   const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="pac-dot" key={ghost1PrevIndex}></div>);
-  
+  const [ghost2Index, setGhost2Index] = useState(100);
+  const [ghost2PrevIndex, setGhost2PrevIndex] = useState(100)
+  const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="pac-dot" key={ghost2PrevIndex}></div>);
   
 
   useLayoutEffect(() => {
@@ -54,6 +56,7 @@ function Game(){
           
         }
       }
+      
       return walls;
       
     }
@@ -63,24 +66,65 @@ function Game(){
       walls.forEach(element => layout[element] = 1);
       return layout;
     }
+
+
     function improveMap(layout) {
+      for(let i = 0; i< 28; i++){
+        layout[i] = 1;
+      }
+      for(let i = layout.length - 28; i< layout.length; i++){
+        layout[i] = 1;
+      }
+      for(let i = 0; i< layout.length - 28; i=i+28){
+        layout[i] = 1;
+      }
+      for(let i = 27; i< layout.length; i=i+28){
+        layout[i] = 1;
+      }
+
       layout.forEach((element, index)=> {
         if(element == 0){
-          if(layout[index+1] !==0 && layout[index-1] !==0 && layout[index+28] !==0 && layout[index-28] !==0){
+          let numOfNaighbors = 0;
+          
+          if(layout[index+1] ==0) numOfNaighbors++;
+          if(layout[index-1] ==0) numOfNaighbors++;
+          if(layout[index+28] ==0) numOfNaighbors++;
+          if(layout[index-28] ==0) numOfNaighbors++;
+          
+          if(numOfNaighbors == 1) {
+            const width = 28;
+            if (layout[index+28] !==0 && index + width < width * width){
+              layout[index+28] =0;
+            } else if(layout[index-28] !==0 && index - width >= 0){
+              layout[index-28] =0;
+            } else if(layout[index-28] ===0 && index - width >= 0){
+              layout[index-56] =0;
+            } else if(layout[index+1] !==0 && index % width < width - 1) {
+              layout[index+1] = 0;
+            } else if (layout[index-1] !==0 && index % width !== 0){
+              layout[index-1] =0;
+            }  else {
+              layout[index]=1;
+            }
+          } else if (numOfNaighbors == 0){
             layout[index]=1;
-            walls.push(element);
-          } 
+          };
+          
         }
-      })
+      });
       
       return layout;
     }
+    
     const layout = createLayout(784);
-    const walls = createWalls(500);
+    const walls = createWalls(700);
     setWalls(walls);
     const mapWithWalls = addWallsToLayout(layout);
-    const improvedMap = improveMap(mapWithWalls);
-    setLayout(improvedMap);
+    const improvedMap1 = improveMap(mapWithWalls);
+    const improvedMap2 = improveMap(improvedMap1)
+    
+    
+    setLayout(improvedMap2);
     setStart(false);
   }, []);
 
@@ -104,6 +148,7 @@ function Game(){
         
         board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
         board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
+        board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
         console.log("create board");
         
         return board;
@@ -118,9 +163,13 @@ function Game(){
     } else if(start){
       
       squares[ghost1PrevIndex] = ghost1PrevElem;
+      squares[ghost2PrevIndex] = ghost2PrevElem;
       setGhost1PrevElem(squares[ghost1Index]);
       setGhost1PrevIndex(ghost1Index);
+      setGhost2PrevElem(squares[ghost2Index]);
+      setGhost2PrevIndex(ghost2Index);
       squares[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
+      squares[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
       setSquares(squares);
       if(prevPacmanIndex !== currentPacmanIndex){
         function action() {
@@ -140,7 +189,7 @@ function Game(){
   useLayoutEffect(() => {
     if(start){
       
-      function moveGhost() {
+      function moveGhost1() {
         const width = 28;
         const directions = [-1, +1, width, -width];     
         let direction = directions[Math.floor(Math.random() * directions.length)];   
@@ -164,15 +213,46 @@ function Game(){
             if (ghost1Index + width < width * width && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
             break;
         }
-        
-        
-
+              
         setCount(count+1);
       }
-      let timerId = setInterval(moveGhost, 100);
+      function moveGhost2() {
+        const width = 28;
+        const directions = [-1, +1, width, -width];     
+        let direction = directions[Math.floor(Math.random() * directions.length)];   
+        let arr =walls;
+        let nextIndex = ghost2Index + direction;
+        switch(direction) {
+          case -1:
+            console.log(squares[ghost2Index + direction]);
+            console.log("ghost:" + ghost2Index);
+            console.log(direction);
+            
+            if (ghost2Index % width !== 0 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            break;
+          case -28:
+            if(ghost2Index - width >= 0 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            break;
+          case 1:
+            if (ghost2Index % width < width - 1 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            break;
+          case 28:
+            if (ghost2Index + width < width * width && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            break;
+        }
+        setCount(count+1);
+      }
+      function moveGhosts() {
+        moveGhost1();
+        moveGhost2();
+      }
+      let timerId = setInterval(moveGhosts, 100);
+      
       return () => {
         clearInterval(timerId);
+        
       }
+
     }
   });
  
