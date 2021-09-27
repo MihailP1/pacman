@@ -21,17 +21,18 @@ function Game(){
   const [layout, setLayout] = useState([]);
   const [walls, setWalls] =useState([]);
   const [count, setCount] = useState(0);
-  const [ghost1Index, setGhost1Index] = useState(300);
-  const [ghost1PrevIndex, setGhost1PrevIndex] = useState(300)
-  const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="pac-dot" key={ghost1PrevIndex}></div>);
-  const [ghost2Index, setGhost2Index] = useState(100);
-  const [ghost2PrevIndex, setGhost2PrevIndex] = useState(100)
-  const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="pac-dot" key={ghost2PrevIndex}></div>);
+  const [ghost1Index, setGhost1Index] = useState(500);
+  const [ghost1PrevIndex, setGhost1PrevIndex] = useState(500)
+  const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="wall" key={ghost1PrevIndex}></div>);
+  const [ghost2Index, setGhost2Index] = useState(600);
+  const [ghost2PrevIndex, setGhost2PrevIndex] = useState(600)
+  const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="wall" key={ghost2PrevIndex}></div>);
   const [pacDots, setPacdots] = useState(1);
   
 
   useLayoutEffect(() => {
-    function createLayout(num) {
+    
+/*    function createLayout(num) {
       const lay =[];
       for(let i=0; i < num; i++){
         lay.push(0);
@@ -39,8 +40,105 @@ function Game(){
       } 
       return lay;  
     }
+*/  
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min; 
+    }
+    function createLay(num) {
+      
+      const lay = [];
+      let prevSquare = 15;
+      lay.push(15);
+      let width = 28;
+      let directions = [-2, +2, -width*2, +width*2, -3, +3, -width*3, width*3];
 
-    function createWalls(num) {
+      for(let i = 0; i < num; i++){
+        
+        let direction = getRandomInt(0, 4);
+        
+        console.log("count:" + i)
+        
+        if(lay.indexOf(prevSquare + directions[direction]) !== -1){
+          direction = getRandomInt(0, 8);
+        } 
+        if(lay.indexOf(prevSquare + directions[direction]) !== -1){
+          direction = getRandomInt(0, 8);
+        } 
+
+        
+        switch(direction){
+          
+          
+          case 0:
+            if(prevSquare % width - 1 !== 0){
+              prevSquare = prevSquare -1;
+              lay.push(prevSquare);
+              prevSquare = prevSquare - 1;
+              lay.push(prevSquare);
+            } 
+            break;
+          
+          case 1:
+            if(prevSquare % width < width - 2){
+              prevSquare = prevSquare + 1;
+              lay.push(prevSquare);
+              prevSquare = prevSquare + 1;
+              lay.push(prevSquare);
+            } 
+            break;
+          
+          case 2:
+            if(prevSquare - width*2 >= 0){
+              prevSquare = prevSquare - width;
+              lay.push(prevSquare);
+              prevSquare = prevSquare - width;
+              lay.push(prevSquare);
+            } 
+            break;
+          
+          case 3:
+            if(prevSquare + width*2 < width * width){
+              prevSquare = prevSquare + width;
+              lay.push(prevSquare);
+              prevSquare = prevSquare + width;
+              lay.push(prevSquare);
+            }
+            break;
+
+          
+        }
+        
+      }
+
+      const finalLay = [];
+      for(let i = 0; i < 784; i++) {
+        if(lay.indexOf(i)!==-1){
+          finalLay.push(0);
+        } else  {
+          finalLay.push(1);
+        }
+      }
+      
+      finalLay.forEach((element, index)=> {
+        if(element == 0){
+          let numOfNaighbors = 0;
+          
+          if(finalLay[index+1] ==0) numOfNaighbors++;
+          if(finalLay[index-1] ==0) numOfNaighbors++;
+          if(finalLay[index+28] ==0) numOfNaighbors++;
+          if(finalLay[index-28] ==0) numOfNaighbors++;
+
+          if(numOfNaighbors < 1) finalLay[index] = 1;
+       }
+
+      });
+      return finalLay;
+    }
+
+
+/*    function createWalls(num) {
 
       function getRandomInt(min, max) {
         min = Math.ceil(min);
@@ -116,6 +214,7 @@ function Game(){
       
       return layout;
     }
+
     function getWalls(finalMap) {
       finalMap.forEach((elem, index)=>{
         if(elem == 1 && walls.indexOf(index)==-1){
@@ -127,15 +226,31 @@ function Game(){
       return walls;
     }
     const initLayout = createLayout(784);
-    const walls = createWalls(10);
+    const walls = createWalls(700);
     setWalls(walls);
     const mapWithWalls = addWallsToLayout(initLayout);
     const improvedMap1 = improveMap(mapWithWalls);
     const improvedMap2 = improveMap(improvedMap1)
-    
+  
+
+
     setWalls(getWalls(improvedMap2));
     setLayout(improvedMap2);
+
     
+*/
+
+    function getWalls(lay) {
+      const walls = []
+      lay.forEach((elem, index) => {
+        if(elem === 1) walls.push(index);
+      })
+      return walls;
+    }
+    const finalMap = createLay(400);
+    const finalWalls = getWalls(finalMap)
+    setWalls(finalWalls);
+    setLayout(finalMap);
     setStart(false);
     
   }, []);
@@ -153,8 +268,6 @@ function Game(){
             board.push(<div className="pac-dot" key={i}></div>)
           } else if (layout[i] === 1) {
             board.push(<div className="wall" key={i}></div>)
-          } else if (layout[i] === 3) {
-            board.push(<div className="power-pellet" key={i}></div>)
           }   
         }
         
@@ -162,27 +275,27 @@ function Game(){
         board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
         board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
         board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
-        console.log("create board");
+        
         
         return board;
 
       }
       
-      for(let i = 200; i<400; i++){
+      for(let i = 0; i<300; i++){
         if(layout[i]==0){
           setGhost1Index(i);
           
           break;
         }
       }
-      for(let i = 401; i<600; i++){
+      for(let i = 601; i<784; i++){
         if(layout[i]==0){
           setGhost2Index(i);
           
           break;
         }
       }
-      for(let i = 0; i<200; i++){
+      for(let i = 301; i<500; i++){
         if(layout[i]==0){
           
           setPacmanIndex(i);
@@ -191,6 +304,7 @@ function Game(){
         }
       }
       setSquares(createBoard());
+
       function getPacdots() {
         const pacDots = [];
         for(let i = 0; i < layout.length; i++){
@@ -215,7 +329,7 @@ function Game(){
       setSquares(squares);
       if(prevPacmanIndex !== currentPacmanIndex){
         function action() {
-          console.log("action");
+          
           if(pacDots.indexOf(currentPacmanIndex)!==-1){
             pacDots.splice(pacDots.indexOf(currentPacmanIndex), 1);
             setPacdots(pacDots);
@@ -245,9 +359,6 @@ function Game(){
         let nextIndex = ghost1Index + direction;
         switch(direction) {
           case -1:
-            console.log(squares[ghost1Index + direction]);
-            console.log("ghost:" + ghost1Index);
-            console.log(direction);
             
             if (ghost1Index % width !== 0 && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
             break;
@@ -272,9 +383,6 @@ function Game(){
         let nextIndex = ghost2Index + direction;
         switch(direction) {
           case -1:
-            console.log(squares[ghost2Index + direction]);
-            console.log("ghost:" + ghost2Index);
-            console.log(direction);
             
             if (ghost2Index % width !== 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
             break;
@@ -307,12 +415,12 @@ function Game(){
 
   useLayoutEffect(() => {
     if(start){
-      console.log("add event");
+      
       
       document.addEventListener("keydown", movePacman);
       function movePacman(e) {
         
-        console.log("pacman move");
+        
         const width = 28;
 
         switch(e.keyCode) {
@@ -366,7 +474,11 @@ function Game(){
 
 
   return (
-    <div className="grid">{squares}</div>
+    <div>
+      <div className="grid">{squares}</div>
+      <div>{pacDots.length}</div>
+    </div>
+    
   );
 }
 
