@@ -14,8 +14,8 @@ function App() {
 
 function Game(){
 
-  const [currentPacmanIndex, setPacmanIndex] = useState(490);
-  const [prevPacmanIndex, setPrevPacmanIndex] = useState(490);
+  const [currentPacmanIndex, setPacmanIndex] = useState(1000);
+  const [prevPacmanIndex, setPrevPacmanIndex] = useState(1000);
   const [squares, setSquares] = useState([]);
   const [start, setStart] = useState("prestart");
   const [layout, setLayout] = useState([]);
@@ -93,15 +93,15 @@ function Game(){
           
           if(numOfNaighbors == 1) {
             const width = 28;
-            if (layout[index+28] !==0 && index + width < width * width){
+            if (layout[index+28] !==0 && index + width + width < width * width){
               layout[index+28] =0;
-            } else if(layout[index-28] !==0 && index - width >= 0){
+            } else if(layout[index-28] !==0 && index - width -width >= 0){
               layout[index-28] =0;
             } else if(layout[index-28] ===0 && index - width >= 0){
               layout[index-56] =0;
-            } else if(layout[index+1] !==0 && index % width < width - 1) {
+            } else if(layout[index+1] !==0 && index % width < width - 2) {
               layout[index+1] = 0;
-            } else if (layout[index-1] !==0 && index % width !== 0){
+            } else if (layout[index-1] !==0 && index % width !== 1){
               layout[index-1] =0;
             }  else {
               layout[index]=1;
@@ -115,17 +115,28 @@ function Game(){
       
       return layout;
     }
-    
-    const layout = createLayout(784);
+    function getWalls(finalMap) {
+      finalMap.forEach((elem, index)=>{
+        if(elem == 1 && walls.indexOf(index)==-1){
+          walls.push(index);
+        } else if(elem==0 && walls.indexOf(index)!=-1){
+          walls.splice(walls.indexOf(index), 1);
+        }
+      })
+      return walls;
+    }
+    const initLayout = createLayout(784);
     const walls = createWalls(700);
     setWalls(walls);
-    const mapWithWalls = addWallsToLayout(layout);
+    const mapWithWalls = addWallsToLayout(initLayout);
     const improvedMap1 = improveMap(mapWithWalls);
     const improvedMap2 = improveMap(improvedMap1)
     
-    
+    setWalls(getWalls(improvedMap2));
     setLayout(improvedMap2);
+    
     setStart(false);
+    
   }, []);
 
 
@@ -146,6 +157,7 @@ function Game(){
           }   
         }
         
+        
         board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
         board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
         board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
@@ -154,7 +166,29 @@ function Game(){
         return board;
 
       }
-
+      
+      for(let i = 200; i<400; i++){
+        if(layout[i]==0){
+          setGhost1Index(i);
+          
+          break;
+        }
+      }
+      for(let i = 401; i<600; i++){
+        if(layout[i]==0){
+          setGhost2Index(i);
+          
+          break;
+        }
+      }
+      for(let i = 0; i<200; i++){
+        if(layout[i]==0){
+          
+          setPacmanIndex(i);
+          
+          break;
+        }
+      }
       setSquares(createBoard());
       
       setStart(true);
@@ -220,7 +254,7 @@ function Game(){
         const width = 28;
         const directions = [-1, +1, width, -width];     
         let direction = directions[Math.floor(Math.random() * directions.length)];   
-        let arr =walls;
+        
         let nextIndex = ghost2Index + direction;
         switch(direction) {
           case -1:
@@ -228,16 +262,16 @@ function Game(){
             console.log("ghost:" + ghost2Index);
             console.log(direction);
             
-            if (ghost2Index % width !== 0 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            if (ghost2Index % width !== 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
             break;
           case -28:
-            if(ghost2Index - width >= 0 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            if(ghost2Index - width >= 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
             break;
           case 1:
-            if (ghost2Index % width < width - 1 && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            if (ghost2Index % width < width - 1 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
             break;
           case 28:
-            if (ghost2Index + width < width * width && arr.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
+            if (ghost2Index + width < width * width && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
             break;
         }
         setCount(count+1);
@@ -270,14 +304,14 @@ function Game(){
 
         switch(e.keyCode) {
           case 37:
-            if(currentPacmanIndex % width !== 0){
+            if(currentPacmanIndex % width !== 0 && walls.indexOf(currentPacmanIndex-1) == -1){
               setPrevPacmanIndex(currentPacmanIndex);         
               setPacmanIndex(currentPacmanIndex-1);
               setCount(count + 1);
             }
             break;
           case 38:
-            if(currentPacmanIndex - width > 0){
+            if(currentPacmanIndex - width > 0 && walls.indexOf(currentPacmanIndex-width) == -1){
               setPrevPacmanIndex(currentPacmanIndex);
               
               setPacmanIndex(currentPacmanIndex-width);
@@ -286,7 +320,7 @@ function Game(){
             }
             break;
           case 39:
-            if(currentPacmanIndex % width < width - 1){
+            if(currentPacmanIndex % width < width - 1 && walls.indexOf(currentPacmanIndex + 1) == -1){
               setPrevPacmanIndex(currentPacmanIndex);
              
               setPacmanIndex(currentPacmanIndex+1);
@@ -295,7 +329,7 @@ function Game(){
             }
             break;
           case 40:
-            if(currentPacmanIndex + width < width * width){
+            if(currentPacmanIndex + width < width * width && walls.indexOf(currentPacmanIndex + width )== -1){
               setPrevPacmanIndex(currentPacmanIndex);
               
               setPacmanIndex(currentPacmanIndex+width);
