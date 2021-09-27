@@ -27,6 +27,7 @@ function Game(){
   const [ghost2Index, setGhost2Index] = useState(100);
   const [ghost2PrevIndex, setGhost2PrevIndex] = useState(100)
   const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="pac-dot" key={ghost2PrevIndex}></div>);
+  const [pacDots, setPacdots] = useState(1);
   
 
   useLayoutEffect(() => {
@@ -126,7 +127,7 @@ function Game(){
       return walls;
     }
     const initLayout = createLayout(784);
-    const walls = createWalls(700);
+    const walls = createWalls(10);
     setWalls(walls);
     const mapWithWalls = addWallsToLayout(initLayout);
     const improvedMap1 = improveMap(mapWithWalls);
@@ -190,7 +191,14 @@ function Game(){
         }
       }
       setSquares(createBoard());
-      
+      function getPacdots() {
+        const pacDots = [];
+        for(let i = 0; i < layout.length; i++){
+          if(layout[i] === 0) pacDots.push(i);
+        }
+        return pacDots;
+      }
+      setPacdots(getPacdots());
       setStart(true);
 
 
@@ -208,12 +216,18 @@ function Game(){
       if(prevPacmanIndex !== currentPacmanIndex){
         function action() {
           console.log("action");
-          
+          if(pacDots.indexOf(currentPacmanIndex)!==-1){
+            pacDots.splice(pacDots.indexOf(currentPacmanIndex), 1);
+            setPacdots(pacDots);
+          }
+
           squares[prevPacmanIndex] = <div key={prevPacmanIndex}></div>;
           squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
           setSquares(squares);
         }
         action();
+        
+
       }
     }
     
@@ -296,7 +310,6 @@ function Game(){
       console.log("add event");
       
       document.addEventListener("keydown", movePacman);
-
       function movePacman(e) {
         
         console.log("pacman move");
