@@ -5,23 +5,40 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
-
-.grid{
+h1 {
+  font-size: 30px;
+  margin: 5px;
+}
+.game {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1180px;
+  position: relative;
+}
+.grid {
   display: flex;
   flex-wrap: wrap;
-  width: 840px;
-  height: 840px;
+  width: 560px;
+  height: 560px;
   border: solid black;
-}
-.grid div {
-  width: 30px;
-  height: 30px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+.grid div {
+  width: 20px;
+  height: 20px;
+}
+.game_data {
+  position: absolute;
+  right: 0;
+}
 .pac-dot {
   background-color: green;
-  border: 8px solid white;
+  border: 7px solid white;
   box-sizing: border-box;
   border-radius: 50px;
 }
@@ -39,10 +56,10 @@ body {
 .pac-man .pacman_eye{
   box-sizing: border-box;
   position: absolute;
-  width: 5px;
-	height: 5px;
+  width: 4px;
+	height: 4px;
 	border-radius: 50%;
-  top: 8%;
+  top: 10%;
   right: 40%;
   background: #000;
 

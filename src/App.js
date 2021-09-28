@@ -5,6 +5,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 function App() {
   return (
     <div className="App">
+      <h1>PACMAN</h1>
       <Game />
     </div>
   );
@@ -14,18 +15,18 @@ function App() {
 
 function Game(){
 
-  const [currentPacmanIndex, setPacmanIndex] = useState(1000);
-  const [prevPacmanIndex, setPrevPacmanIndex] = useState(1000);
+  const [currentPacmanIndex, setPacmanIndex] = useState();
+  const [prevPacmanIndex, setPrevPacmanIndex] = useState();
   const [squares, setSquares] = useState([]);
   const [start, setStart] = useState("prestart");
   const [layout, setLayout] = useState([]);
   const [walls, setWalls] =useState([]);
   const [count, setCount] = useState(0);
-  const [ghost1Index, setGhost1Index] = useState(500);
-  const [ghost1PrevIndex, setGhost1PrevIndex] = useState(500)
+  const [ghost1Index, setGhost1Index] = useState();
+  const [ghost1PrevIndex, setGhost1PrevIndex] = useState()
   const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="wall" key={ghost1PrevIndex}></div>);
-  const [ghost2Index, setGhost2Index] = useState(600);
-  const [ghost2PrevIndex, setGhost2PrevIndex] = useState(600)
+  const [ghost2Index, setGhost2Index] = useState();
+  const [ghost2PrevIndex, setGhost2PrevIndex] = useState()
   const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="wall" key={ghost2PrevIndex}></div>);
   const [pacDots, setPacdots] = useState(1);
   
@@ -280,6 +281,8 @@ function Game(){
         board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
         
         
+        
+        
         return board;
 
       }
@@ -306,8 +309,9 @@ function Game(){
           break;
         }
       }
-      setSquares(createBoard());
 
+      setSquares(createBoard());
+      
       function getPacdots() {
         const pacDots = [];
         for(let i = 0; i < layout.length; i++){
@@ -316,7 +320,11 @@ function Game(){
         return pacDots;
       }
       setPacdots(getPacdots());
+
+      
       setStart(true);
+      
+      
 
 
     } else if(start){
@@ -338,11 +346,13 @@ function Game(){
             setPacdots(pacDots);
           }
 
+          
           squares[prevPacmanIndex] = <div key={prevPacmanIndex}></div>;
           squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}>
             <div className = "pacman_eye"></div>
             <div className = "pacman_mouth"></div>
           </div>;
+          
           setSquares(squares);
         }
         action();
@@ -480,9 +490,9 @@ function Game(){
 
 
   return (
-    <div>
-      <div className="grid">{squares}</div>
-      <div>{pacDots.length}</div>
+    <div className = "game">
+      <div className = "grid">{squares}</div>
+      <div className = "game_data">{pacDots.length}</div>
     </div>
     
   );
