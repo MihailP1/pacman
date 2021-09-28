@@ -272,7 +272,10 @@ function Game(){
         }
         
         
-        board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
+        board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}>
+          <div className = "pacman_eye"></div>
+          <div className = "pacman_mouth"></div>
+        </div>;
         board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
         board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
         
@@ -336,7 +339,10 @@ function Game(){
           }
 
           squares[prevPacmanIndex] = <div key={prevPacmanIndex}></div>;
-          squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}></div>;
+          squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}>
+            <div className = "pacman_eye"></div>
+            <div className = "pacman_mouth"></div>
+          </div>;
           setSquares(squares);
         }
         action();
