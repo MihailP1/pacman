@@ -277,8 +277,14 @@ function Game(){
           <div className = "pacman_eye"></div>
           <div className = "pacman_mouth"></div>
         </div>;
-        board[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
-        board[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
+        board[ghost1Index] = <div className="ghost" key={ghost1Index}>
+          <div className = "left_eye"></div>
+          <div className = "right_eye"></div>
+        </div>;
+        board[ghost2Index] = <div className="ghost" key={ghost2Index}>
+          <div className = "left_eye"></div>
+          <div className = "right_eye"></div>
+        </div>;
         
         
         
@@ -335,8 +341,14 @@ function Game(){
       setGhost1PrevIndex(ghost1Index);
       setGhost2PrevElem(squares[ghost2Index]);
       setGhost2PrevIndex(ghost2Index);
-      squares[ghost1Index] = <div className="ghost" key={ghost1Index}></div>;
-      squares[ghost2Index] = <div className="ghost" key={ghost2Index}></div>;
+      squares[ghost1Index] = <div className="ghost" key={ghost1Index}>
+        <div className = "left_eye"></div>
+        <div className = "right_eye"></div>
+      </div>;
+      squares[ghost2Index] = <div className="ghost" key={ghost2Index}>
+        <div className = "left_eye"></div>
+        <div className = "right_eye"></div>
+      </div>;
       setSquares(squares);
       if(prevPacmanIndex !== currentPacmanIndex){
         function action() {

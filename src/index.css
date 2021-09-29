@@ -37,8 +37,8 @@ h1 {
   right: 0;
 }
 .pac-dot {
-  background-color: green;
-  border: 7px solid white;
+  background-color: #0caa21;
+  border: 7px solid #fff;
   box-sizing: border-box;
   border-radius: 50px;
 }
@@ -97,8 +97,32 @@ h1 {
   }
 }
 .ghost {
-  background-color: blue;
-  border-radius: 50px;
+  background-color: #e006bc;
+  border-radius: 50% 50% 10% 10%;
+  box-sizing: border-box;
+  position: relative;
+}
+.ghost .left_eye {
+  box-sizing: border-box;
+  position: absolute;
+  width: 4px;
+	height: 4px;
+	border-radius: 50%;
+  top: 30%;
+  left: 20%;
+  background: #000;
+
+}
+.ghost .right_eye {
+  box-sizing: border-box;
+  position: absolute;
+  width: 4px;
+	height: 4px;
+	border-radius: 50%;
+  top: 30%;
+  right: 20%;
+  background: #000;
+
 }
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
