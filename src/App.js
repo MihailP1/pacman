@@ -12,7 +12,6 @@ function App() {
 }
 
 
-
 function Game(){
 
   const [currentPacmanIndex, setPacmanIndex] = useState();
@@ -22,15 +21,22 @@ function Game(){
   const [layout, setLayout] = useState([]);
   const [walls, setWalls] =useState([]);
   const [count, setCount] = useState(0);
+
   const [ghost1Index, setGhost1Index] = useState();
   const [ghost1PrevIndex, setGhost1PrevIndex] = useState()
   const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="wall" key={ghost1PrevIndex}></div>);
   const [ghost1Direction, setGhost1Direction] = useState(); 
   const [stepsToChangeGhost1, setStepsToChangeGhost1] = useState(3);
   const [ghost1Steps, setGhost1Steps] = useState(0);
+  
+
   const [ghost2Index, setGhost2Index] = useState();
   const [ghost2PrevIndex, setGhost2PrevIndex] = useState()
   const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="wall" key={ghost2PrevIndex}></div>);
+  const [ghost2Direction, setGhost2Direction] = useState(); 
+  const [stepsToChangeGhost2, setStepsToChangeGhost2] = useState(3);
+  const [ghost2Steps, setGhost2Steps] = useState(0);
+
   const [pacDots, setPacdots] = useState(1);
   //width of square
   const [width, setWidth] = useState(28);
@@ -38,15 +44,7 @@ function Game(){
 
   useLayoutEffect(() => {
     
-/*    function createLayout(num) {
-      const lay =[];
-      for(let i=0; i < num; i++){
-        lay.push(0);
-        
-      } 
-      return lay;  
-    }
-*/  
+
     function getRandomInt(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
@@ -143,108 +141,6 @@ function Game(){
       return finalLay;
     }
 
-
-/*    function createWalls(num) {
-
-      function getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min)) + min; 
-      }
-      
-      const walls = [];
-      for (let i=0; i<num; i++){
-        let square = getRandomInt(0, 784);
-        
-        if(walls.indexOf(square)==-1){
-          walls.push(square);
-          
-        }
-      }
-      
-      return walls;
-      
-    }
-
-    function addWallsToLayout(layout) {
-      
-      walls.forEach(element => layout[element] = 1);
-      return layout;
-    }
-
-
-    function improveMap(layout) {
-      for(let i = 0; i< 28; i++){
-        layout[i] = 1;
-      }
-      for(let i = layout.length - 28; i< layout.length; i++){
-        layout[i] = 1;
-      }
-      for(let i = 0; i< layout.length - 28; i=i+28){
-        layout[i] = 1;
-      }
-      for(let i = 27; i< layout.length; i=i+28){
-        layout[i] = 1;
-      }
-
-      layout.forEach((element, index)=> {
-        if(element == 0){
-          let numOfNaighbors = 0;
-          
-          if(layout[index+1] ==0) numOfNaighbors++;
-          if(layout[index-1] ==0) numOfNaighbors++;
-          if(layout[index+28] ==0) numOfNaighbors++;
-          if(layout[index-28] ==0) numOfNaighbors++;
-          
-          if(numOfNaighbors == 1) {
-            
-            if (layout[index+28] !==0 && index + width + width < width * width){
-              layout[index+28] =0;
-            } else if(layout[index-28] !==0 && index - width -width >= 0){
-              layout[index-28] =0;
-            } else if(layout[index-28] ===0 && index - width >= 0){
-              layout[index-56] =0;
-            } else if(layout[index+1] !==0 && index % width < width - 2) {
-              layout[index+1] = 0;
-            } else if (layout[index-1] !==0 && index % width !== 1){
-              layout[index-1] =0;
-            }  else {
-              layout[index]=1;
-            }
-          } else if (numOfNaighbors == 0){
-            layout[index]=1;
-          };
-          
-        }
-      });
-      
-      return layout;
-    }
-
-    function getWalls(finalMap) {
-      finalMap.forEach((elem, index)=>{
-        if(elem == 1 && walls.indexOf(index)==-1){
-          walls.push(index);
-        } else if(elem==0 && walls.indexOf(index)!=-1){
-          walls.splice(walls.indexOf(index), 1);
-        }
-      })
-      return walls;
-    }
-    const initLayout = createLayout(784);
-    const walls = createWalls(700);
-    setWalls(walls);
-    const mapWithWalls = addWallsToLayout(initLayout);
-    const improvedMap1 = improveMap(mapWithWalls);
-    const improvedMap2 = improveMap(improvedMap1)
-  
-
-
-    setWalls(getWalls(improvedMap2));
-    setLayout(improvedMap2);
-
-    
-*/
       
     function getWalls(lay) {
       const walls = []
@@ -389,8 +285,43 @@ function Game(){
   useLayoutEffect(() => {
     if(start){
       
-      function moveGhost1() {
+
+      const ghost1States = {
+        index: ghost1Index,
+        prevIndex: ghost1PrevIndex,
+        prevElem: ghost1PrevElem,
+        direction: ghost1Direction,
+        stepsToChange: stepsToChangeGhost1,
+        steps: ghost1Steps
+      };
+      const ghost1Sets={
+        setIndex: setGhost1Index,
+        setPrevIndex: setGhost1PrevIndex,
+        setPrevElem: setGhost1PrevElem,
+        setDirection: setGhost1Direction,
+        setStepToChange: setStepsToChangeGhost1,
+        setSteps: setGhost1Steps
+      };
+      const ghost2States = {
+        index: ghost2Index,
+        prevIndex: ghost2PrevIndex,
+        prevElem: ghost2PrevElem,
+        direction: ghost2Direction,
+        stepsToChange: stepsToChangeGhost2,
+        steps: ghost2Steps
+      };
+      const ghost2Sets={
+        setIndex: setGhost2Index,
+        setPrevIndex: setGhost2PrevIndex,
+        setPrevElem: setGhost2PrevElem,
+        setDirection: setGhost2Direction,
+        setStepToChange: setStepsToChangeGhost2,
+        setSteps: setGhost2Steps
+      };
+
+      function moveGhost(states, sets){
         
+        console.log(states.index);
         
         let way = Math.floor(Math.random() * 2);
         
@@ -399,155 +330,133 @@ function Game(){
           max = Math.floor(max);
           return Math.floor(Math.random() * (max - min)) + min; 
         }
+
         const directions = [-1, +1, width, -width]; 
-        console.log(stepsToChangeGhost1);
-        console.log(ghost1Steps);
 
 
         function changeDirection(direction){
-          if(ghost1Steps !== stepsToChangeGhost1) {
-            setGhost1Direction(direction);
-            setGhost1Steps(ghost1Steps + 1);
-          } else if (ghost1Steps === stepsToChangeGhost1) {
+          if(states.steps !== states.stepsToChange) {
+            sets.setDirection(direction);
+            sets.setSteps(states.steps + 1);
+          } else if (states.steps === states.stepsToChange) {
               console.log("change direction");
-              setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]);
-              setStepsToChangeGhost1(getRandomInt(2, 3));
-              setGhost1Steps(0);
+              sets.setDirection(directions[Math.floor(Math.random() * directions.length)]);
+              sets.setStepToChange(getRandomInt(2, 3));
+              sets.setSteps(0);
           }
         } 
-        switch(ghost1Direction) {
+
+        switch(states.direction) {
            
           case -1:
             
-            if (ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+            if (states.index % width !== 0 && walls.indexOf(states.index - 1) == -1) {
               
-              setGhost1Index(ghost1Index - 1);
+              sets.setIndex(states.index - 1);
               changeDirection(-1);   
               break;
-            } else if(way === 0 && ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+            } else if(way === 0 && states.index - width >= 0 && walls.indexOf(states.index - width) == -1) {
               
-              setGhost1Index(ghost1Index - width);
+              sets.setIndex(states.index - width);
               changeDirection(-28); 
               break;
-            } else if (way === 1 && ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+            } else if (way === 1 && states.index + width < width * width && walls.indexOf(states.index + width)==-1) {
               
-              setGhost1Index(ghost1Index + width);
+              sets.setIndex(states.index + width);
               changeDirection(28); 
               break;
-            } else if (ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+            } else if (states.index % width < width - 1 && walls.indexOf(states.index + 1)==-1) {
               
-              setGhost1Index(ghost1Index + 1);
+              sets.setIndex(states.index + 1);
               changeDirection(1); 
               break;
             }
           case -28:
-            if(ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+            if(states.index - width >= 0 && walls.indexOf(states.index - width)==-1) {
               
-              setGhost1Index(ghost1Index - width);
+              sets.setIndex(states.index - width);
               changeDirection(-28); 
               break;
-            } else if (way === 0 && ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+            } else if (way === 0 && states.index % width < width - 1 && walls.indexOf(states.index + 1)==-1) {
               
-              setGhost1Index(ghost1Index + 1);
+              sets.setIndex(states.index + 1);
               changeDirection(1); 
               break;
-            } else if (way === 1 && ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+            } else if (way === 1 && states.index % width !== 0 && walls.indexOf(states.index - 1)==-1) {
               
-              setGhost1Index(ghost1Index - 1);
+              sets.setIndex(states.index - 1);
               changeDirection(-1); 
               break;
-            } else if (ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+            } else if (states.index + width < width * width && walls.indexOf(states.index + width)==-1) {
               
-              setGhost1Index(ghost1Index + width);
+              sets.setIndex(states.index + width);
               changeDirection(28); 
               break;
             }
             
             
           case 1:
-            if (ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+            if (states.index % width < width - 1 && walls.indexOf(states.index + 1)==-1) {
              
-              setGhost1Index(ghost1Index + 1);
+              sets.setIndex(states.index + 1);
               changeDirection(1); 
               break;
-            } else if(way === 0 && ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+            } else if(way === 0 && states.index - width >= 0 && walls.indexOf(states.index - width)==-1) {
               
-              setGhost1Index(ghost1Index - width);
+              sets.setIndex(states.index - width);
               changeDirection(-28); 
               break;
-            } else if (way === 1 && ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+            } else if (way === 1 && states.index + width < width * width && walls.indexOf(states.index + width)==-1) {
               
-              setGhost1Index(ghost1Index + width);
+              sets.setIndex(states.index + width);
               changeDirection(28); 
               break;
-            } else if (ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+            } else if (states.index % width !== 0 && walls.indexOf(states.index - 1)==-1) {
               
-              setGhost1Index(ghost1Index - 1);
+              sets.setIndex(states.index - 1);
               changeDirection(-1); 
               break;
             }
             
           case 28:
-            if (ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+            if (states.index + width < width * width && walls.indexOf(states.index + width)==-1) {
               
-              setGhost1Index(ghost1Index + width);
+              sets.setIndex(states.index + width);
               changeDirection(28); 
               break;
-            } else if (way === 0 && ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+            } else if (way === 0 && states.index % width < width - 1 && walls.indexOf(states.index + 1)==-1) {
               
-              setGhost1Index(ghost1Index + 1);
+              sets.setIndex(states.index + 1);
               changeDirection(1); 
               break;
-            } else if (way === 1 && ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+            } else if (way === 1 && states.index % width !== 0 && walls.indexOf(states.index - 1)==-1) {
               
-              setGhost1Index(ghost1Index - 1);
+              sets.setIndex(states.index - 1);
               changeDirection(-1); 
               break;
-            } else if(ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+            } else if(states.index - width >= 0 && walls.indexOf(states.index - width)==-1) {
               
-              setGhost1Index(ghost1Index - width);
+              sets.setIndex(states.index - width);
               changeDirection(-28); 
               break;
             }
             
           default:
-            console.log("default")
-            setGhost1Index(ghost1Index);
+            
+            sets.setIndex(states.index);
             
            
-            setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]);
+            sets.setDirection(directions[Math.floor(Math.random() * directions.length)]);
             break;
 
         }
          
         
       }
-      function moveGhost2() {
-        
-        const directions = [-1, +1, width, -width];     
-        let direction = directions[Math.floor(Math.random() * directions.length)];   
-        
-        let nextIndex = ghost2Index + direction;
-        switch(direction) {
-          case -1:
-            
-            if (ghost2Index % width !== 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
-            
-          case -28:
-            if(ghost2Index - width >= 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
-            
-          case 1:
-            if (ghost2Index % width < width - 1 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
-            
-          case 28:
-            if (ghost2Index + width < width * width && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
-            
-        }
-        setCount(count+1);
-      }
+      
       function moveGhosts() {
-        moveGhost1();
-        moveGhost2();
+        moveGhost(ghost1States, ghost1Sets);
+        moveGhost(ghost2States, ghost2Sets);
       }
       let timerId = setInterval(moveGhosts, 100);
       
@@ -630,4 +539,8 @@ function Game(){
 }
 
 
+
+
+
 export default App;
+
