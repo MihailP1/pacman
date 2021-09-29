@@ -18,17 +18,22 @@ function Game(){
   const [currentPacmanIndex, setPacmanIndex] = useState();
   const [prevPacmanIndex, setPrevPacmanIndex] = useState();
   const [squares, setSquares] = useState([]);
-  const [start, setStart] = useState("prestart");
+  const [start, setStart] = useState();
   const [layout, setLayout] = useState([]);
   const [walls, setWalls] =useState([]);
   const [count, setCount] = useState(0);
   const [ghost1Index, setGhost1Index] = useState();
   const [ghost1PrevIndex, setGhost1PrevIndex] = useState()
   const [ghost1PrevElem, setGhost1PrevElem] = useState(<div className="wall" key={ghost1PrevIndex}></div>);
+  const [ghost1Direction, setGhost1Direction] = useState(); 
+  const [stepsToChangeGhost1, setStepsToChangeGhost1] = useState(3);
+  const [ghost1Steps, setGhost1Steps] = useState(0);
   const [ghost2Index, setGhost2Index] = useState();
   const [ghost2PrevIndex, setGhost2PrevIndex] = useState()
   const [ghost2PrevElem, setGhost2PrevElem] = useState(<div className="wall" key={ghost2PrevIndex}></div>);
   const [pacDots, setPacdots] = useState(1);
+  //width of square
+  const [width, setWidth] = useState(28);
   
 
   useLayoutEffect(() => {
@@ -52,14 +57,14 @@ function Game(){
       const lay = [];
       let prevSquare = 15;
       lay.push(15);
-      let width = 28;
+      
       let directions = [-2, +2, -width*2, +width*2, -3, +3, -width*3, width*3];
 
       for(let i = 0; i < num; i++){
         
         let direction = getRandomInt(0, 4);
         
-        console.log("count:" + i)
+        
         
         if(lay.indexOf(prevSquare + directions[direction]) !== -1){
           direction = getRandomInt(0, 8);
@@ -192,7 +197,7 @@ function Game(){
           if(layout[index-28] ==0) numOfNaighbors++;
           
           if(numOfNaighbors == 1) {
-            const width = 28;
+            
             if (layout[index+28] !==0 && index + width + width < width * width){
               layout[index+28] =0;
             } else if(layout[index-28] !==0 && index - width -width >= 0){
@@ -240,7 +245,7 @@ function Game(){
 
     
 */
-
+      
     function getWalls(lay) {
       const walls = []
       lay.forEach((elem, index) => {
@@ -252,6 +257,11 @@ function Game(){
     const finalWalls = getWalls(finalMap)
     setWalls(finalWalls);
     setLayout(finalMap);
+
+    
+    const directions = [-1, +1, width, -width];     
+    setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]); 
+
     setStart(false);
     
   }, []);
@@ -380,31 +390,140 @@ function Game(){
     if(start){
       
       function moveGhost1() {
-        const width = 28;
-        const directions = [-1, +1, width, -width];     
-        let direction = directions[Math.floor(Math.random() * directions.length)];   
-        let arr =walls;
-        let nextIndex = ghost1Index + direction;
-        switch(direction) {
+        
+        
+        let way = Math.floor(Math.random() * 2);
+        
+        function getRandomInt(min, max) {
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min)) + min; 
+        }
+        const directions = [-1, +1, width, -width]; 
+        console.log(stepsToChangeGhost1);
+        console.log(ghost1Steps);
+
+
+        function changeDirection(direction){
+          if(ghost1Steps !== stepsToChangeGhost1) {
+            setGhost1Direction(direction);
+            setGhost1Steps(ghost1Steps + 1);
+          } else if (ghost1Steps === stepsToChangeGhost1) {
+              console.log("change direction");
+              setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]);
+              setStepsToChangeGhost1(getRandomInt(2, 3));
+              setGhost1Steps(0);
+          }
+        } 
+        switch(ghost1Direction) {
+           
           case -1:
             
-            if (ghost1Index % width !== 0 && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
-            break;
-          case -28:
-            if(ghost1Index - width >= 0 && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
-            break;
-          case 1:
-            if (ghost1Index % width < width - 1 && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
-            break;
-          case 28:
-            if (ghost1Index + width < width * width && arr.indexOf(nextIndex)==-1) {setGhost1Index(nextIndex)}  else {setGhost1Index(ghost1Index)};
-            break;
-        }
+            if (ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
               
-        setCount(count+1);
+              setGhost1Index(ghost1Index - 1);
+              changeDirection(-1);   
+              break;
+            } else if(way === 0 && ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+              
+              setGhost1Index(ghost1Index - width);
+              changeDirection(-28); 
+              break;
+            } else if (way === 1 && ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+              
+              setGhost1Index(ghost1Index + width);
+              changeDirection(28); 
+              break;
+            } else if (ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+              
+              setGhost1Index(ghost1Index + 1);
+              changeDirection(1); 
+              break;
+            }
+          case -28:
+            if(ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+              
+              setGhost1Index(ghost1Index - width);
+              changeDirection(-28); 
+              break;
+            } else if (way === 0 && ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+              
+              setGhost1Index(ghost1Index + 1);
+              changeDirection(1); 
+              break;
+            } else if (way === 1 && ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+              
+              setGhost1Index(ghost1Index - 1);
+              changeDirection(-1); 
+              break;
+            } else if (ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+              
+              setGhost1Index(ghost1Index + width);
+              changeDirection(28); 
+              break;
+            }
+            
+            
+          case 1:
+            if (ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+             
+              setGhost1Index(ghost1Index + 1);
+              changeDirection(1); 
+              break;
+            } else if(way === 0 && ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+              
+              setGhost1Index(ghost1Index - width);
+              changeDirection(-28); 
+              break;
+            } else if (way === 1 && ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+              
+              setGhost1Index(ghost1Index + width);
+              changeDirection(28); 
+              break;
+            } else if (ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+              
+              setGhost1Index(ghost1Index - 1);
+              changeDirection(-1); 
+              break;
+            }
+            
+          case 28:
+            if (ghost1Index + width < width * width && walls.indexOf(ghost1Index + width)==-1) {
+              
+              setGhost1Index(ghost1Index + width);
+              changeDirection(28); 
+              break;
+            } else if (way === 0 && ghost1Index % width < width - 1 && walls.indexOf(ghost1Index + 1)==-1) {
+              
+              setGhost1Index(ghost1Index + 1);
+              changeDirection(1); 
+              break;
+            } else if (way === 1 && ghost1Index % width !== 0 && walls.indexOf(ghost1Index - 1)==-1) {
+              
+              setGhost1Index(ghost1Index - 1);
+              changeDirection(-1); 
+              break;
+            } else if(ghost1Index - width >= 0 && walls.indexOf(ghost1Index - width)==-1) {
+              
+              setGhost1Index(ghost1Index - width);
+              changeDirection(-28); 
+              break;
+            }
+            
+          default:
+            console.log("default")
+            setGhost1Index(ghost1Index);
+            
+           
+            setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]);
+            break;
+
+        }
+         
+        
       }
       function moveGhost2() {
-        const width = 28;
+        
         const directions = [-1, +1, width, -width];     
         let direction = directions[Math.floor(Math.random() * directions.length)];   
         
@@ -412,17 +531,17 @@ function Game(){
         switch(direction) {
           case -1:
             
-            if (ghost2Index % width !== 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
-            break;
+            if (ghost2Index % width !== 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
+            
           case -28:
-            if(ghost2Index - width >= 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
-            break;
+            if(ghost2Index - width >= 0 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
+            
           case 1:
-            if (ghost2Index % width < width - 1 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
-            break;
+            if (ghost2Index % width < width - 1 && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
+            
           case 28:
-            if (ghost2Index + width < width * width && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)}  else {setGhost2Index(ghost2Index)};
-            break;
+            if (ghost2Index + width < width * width && walls.indexOf(nextIndex)==-1) {setGhost2Index(nextIndex)} break;
+            
         }
         setCount(count+1);
       }
@@ -449,7 +568,7 @@ function Game(){
       function movePacman(e) {
         
         
-        const width = 28;
+        
 
         switch(e.keyCode) {
           case 37:
