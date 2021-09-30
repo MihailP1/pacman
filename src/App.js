@@ -241,7 +241,9 @@ function Game(){
 
 
     } else if(stage === "game"){
-      
+      if(currentPacmanIndex === ghost1Index || currentPacmanIndex === ghost2Index) {
+        setStage("game over");
+      }
       squares[ghost1PrevIndex] = ghost1PrevElem;
       squares[ghost2PrevIndex] = ghost2PrevElem;
       setGhost1PrevElem(squares[ghost1Index]);
@@ -258,6 +260,7 @@ function Game(){
       </div>;
       setSquares(squares);
       if(prevPacmanIndex !== currentPacmanIndex){
+
         function action() {
           
           if(pacDots.indexOf(currentPacmanIndex)!==-1){
@@ -274,9 +277,9 @@ function Game(){
           
           setSquares(squares);
         }
+
         action();
         
-
       }
     }
     
