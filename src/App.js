@@ -17,7 +17,8 @@ function Game(){
   const [currentPacmanIndex, setPacmanIndex] = useState();
   const [prevPacmanIndex, setPrevPacmanIndex] = useState();
   const [squares, setSquares] = useState([]);
-  const [start, setStart] = useState();
+  //stages: "preparation" -> "game" -> "game over"
+  const [stage, setStage] = useState();
   const [layout, setLayout] = useState([]);
   const [walls, setWalls] =useState([]);
   const [count, setCount] = useState(0);
@@ -158,13 +159,13 @@ function Game(){
     const directions = [-1, +1, width, -width];     
     setGhost1Direction(directions[Math.floor(Math.random() * directions.length)]); 
 
-    setStart(false);
+    setStage("preparation");
     
   }, []);
 
 
   useLayoutEffect(() => {
-    if(start === false){
+    if(stage === "preparation") {
       
 
       function createBoard() {
@@ -234,12 +235,12 @@ function Game(){
       setPacdots(getPacdots());
 
       
-      setStart(true);
+      setStage("game");
       
       
 
 
-    } else if(start){
+    } else if(stage === "game"){
       
       squares[ghost1PrevIndex] = ghost1PrevElem;
       squares[ghost2PrevIndex] = ghost2PrevElem;
@@ -283,7 +284,7 @@ function Game(){
   
 
   useLayoutEffect(() => {
-    if(start){
+    if(stage === "game"){
       
 
       const ghost1States = {
@@ -470,9 +471,10 @@ function Game(){
  
 
   useLayoutEffect(() => {
-    if(start){
+  
+    if(stage === "game"){
       
-      
+      if(pacDots.length === 0) setStage("game over");
       document.addEventListener("keydown", movePacman);
       function movePacman(e) {
         
@@ -521,17 +523,21 @@ function Game(){
       return () => {
         document.removeEventListener("keydown", movePacman);
       }
-    }
+    } 
     
   });
 
+  let game;
+  if(stage !== "game over"){
+    game = <div className = "grid">{squares}</div>;
+  } else if (stage === "game over") {
+    game = <div >GAME OVER</div>;
+  }
   
-  
-
 
   return (
     <div className = "game">
-      <div className = "grid">{squares}</div>
+      {game}
       <div className = "game_data">{pacDots.length}</div>
     </div>
     
