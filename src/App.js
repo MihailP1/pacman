@@ -325,7 +325,7 @@ function Game(){
 
       function moveGhost(states, sets){
         
-        console.log(states.index);
+        
         
         let way = Math.floor(Math.random() * 2);
         
@@ -343,7 +343,7 @@ function Game(){
             sets.setDirection(direction);
             sets.setSteps(states.steps + 1);
           } else if (states.steps === states.stepsToChange) {
-              console.log("change direction");
+              
               sets.setDirection(directions[Math.floor(Math.random() * directions.length)]);
               sets.setStepToChange(getRandomInt(2, 3));
               sets.setSteps(0);
@@ -462,7 +462,7 @@ function Game(){
         moveGhost(ghost1States, ghost1Sets);
         moveGhost(ghost2States, ghost2Sets);
       }
-      let timerId = setInterval(moveGhosts, 100);
+      let timerId = setInterval(moveGhosts, 140);
       
       return () => {
         clearInterval(timerId);
@@ -472,7 +472,7 @@ function Game(){
     }
   });
  
-
+  
   useLayoutEffect(() => {
   
     if(stage === "game"){
