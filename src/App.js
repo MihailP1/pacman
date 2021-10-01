@@ -42,6 +42,8 @@ function Game(){
   //width of square
   const [width, setWidth] = useState(28);
   
+ 
+  
 
   useLayoutEffect(() => {
     
@@ -478,11 +480,10 @@ function Game(){
     if(stage === "game"){
       
       if(pacDots.length === 0) setStage("game over");
+
       document.addEventListener("keydown", movePacman);
+      
       function movePacman(e) {
-        
-        
-        
 
         switch(e.keyCode) {
           case 37:
@@ -530,18 +531,75 @@ function Game(){
     
   });
 
+  
+ 
+      
+  
+  const handlerPacMovement = function movePacman(e) {
+
+    switch(e.target.className) {
+      case "left":
+        if(currentPacmanIndex % width !== 0 && walls.indexOf(currentPacmanIndex-1) == -1){
+          setPrevPacmanIndex(currentPacmanIndex);         
+          setPacmanIndex(currentPacmanIndex-1);
+         
+        }
+        break;
+      case "up":
+        if(currentPacmanIndex - width > 0 && walls.indexOf(currentPacmanIndex-width) == -1){
+          setPrevPacmanIndex(currentPacmanIndex);
+          
+          setPacmanIndex(currentPacmanIndex-width);
+          
+          
+        }
+        break;
+      case "right":
+        if(currentPacmanIndex % width < width - 1 && walls.indexOf(currentPacmanIndex + 1) == -1){
+          setPrevPacmanIndex(currentPacmanIndex);
+          
+          setPacmanIndex(currentPacmanIndex+1);
+          
+          
+        }
+        break;
+      case "down":
+        if(currentPacmanIndex + width < width * width && walls.indexOf(currentPacmanIndex + width )== -1){
+          setPrevPacmanIndex(currentPacmanIndex);
+          
+          setPacmanIndex(currentPacmanIndex+width);
+          
+          
+        }
+        break;
+    }   
+  }
+
+  
+
   let game;
+  let movementButtons;
   if(stage !== "game over"){
     game = <div className = "grid">{squares}</div>;
+    movementButtons = 
+    <div className = "movement_buttons">
+      <button className = "up" onClick = {(e) => handlerPacMovement(e)}>↑</button>
+      <div>
+        <button className = "left" onClick = {(e) => handlerPacMovement(e)}>←</button>
+        <button className = "down" onClick = {(e) => handlerPacMovement(e)}>↓</button>
+        <button className = "right" onClick = {(e) => handlerPacMovement(e)}>→</button>
+      </div>
+    </div>;
   } else if (stage === "game over") {
     game = <div >GAME OVER</div>;
   }
   
-
+  
   return (
     <div className = "game">
       {game}
-      <div className = "game_data">{pacDots.length}</div>
+      {movementButtons}
+      <div className = "game_data">remain: {pacDots.length}</div>
     </div>
     
   );
