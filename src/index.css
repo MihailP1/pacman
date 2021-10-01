@@ -138,18 +138,18 @@ code {
   .grid {
     display: flex;
     flex-wrap: wrap;
-    width: 280px;
-    height: 280px;
+    width: 308px;
+    height: 308px;
     border: solid black;
     margin-left: auto;
     margin-right: auto;
   }
   
   .grid div {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
   }
-.pac-dot {    
+  .pac-dot {    
     border: 3px solid #fff;
     
   }
@@ -180,6 +180,11 @@ code {
   }
   .movement_buttons {
     display: block;
+    margin-top: 20%;
+  }
+  .movement_buttons button {
+    width: 90px;
+    height: 50px;
   }
   .game_data {
     position: relative;

@@ -598,8 +598,9 @@ function Game(){
   return (
     <div className = "game">
       {game}
-      {movementButtons}
       <div className = "game_data">remain: {pacDots.length}</div>
+      {movementButtons}
+      
     </div>
     
   );
