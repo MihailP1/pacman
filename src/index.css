@@ -34,7 +34,14 @@ h1 {
 }
 .game_data {
   position: absolute;
-  right: 0;
+  
+  right: 2%;
+}
+.change_map_button {
+  position: absolute;
+  right: 2%;
+  top: 10%;
+  
 }
 .pac-dot {
   background-color: #0caa21;
@@ -187,7 +194,14 @@ code {
     height: 50px;
   }
   .game_data {
-    position: relative;
-    
+    position: static;
+    margin-top: 1%;
+  }
+  .change_map_button {
+    position: static;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1%;
+    width: 100px;
   }
 }

@@ -599,6 +599,7 @@ function Game(){
     <div className = "game">
       {game}
       <div className = "game_data">remain: {pacDots.length}</div>
+      <button className = "change_map_button" onClick = {() => window.location.reload()}>change map</button>
       {movementButtons}
       
     </div>
