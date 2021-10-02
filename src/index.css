@@ -190,8 +190,8 @@ code {
     margin-top: 20%;
   }
   .movement_buttons button {
-    width: 90px;
-    height: 50px;
+    width: 105px;
+    height: 100px;
   }
   .game_data {
     position: static;
@@ -202,6 +202,7 @@ code {
     margin-left: auto;
     margin-right: auto;
     margin-top: 1%;
+    height: 50px;
     width: 100px;
   }
 }
