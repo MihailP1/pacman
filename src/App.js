@@ -683,8 +683,10 @@ function Game(){
 
   let game;
   let movementButtons;
+  let newGame = "change map";
   if(stage !== "game over"){
     game = <div className = "grid">{squares}</div>;
+    
     movementButtons = 
     <div className = "movement_buttons">
       <button className = "up" onClick = {(e) => handlerPacMovement(e)}>↑</button>
@@ -695,15 +697,16 @@ function Game(){
       </div>
     </div>;
   } else if (stage === "game over") {
-    game = <div >GAME OVER</div>;
+    game = <div className = "gameover_text">GAME OVER</div>;
+    newGame = "new game";
   }
   
   
   return (
     <div className = "game">
       {game}
-      <div className = "game_data">remain: {pacDots.length}</div>
-      <button className = "change_map_button" onClick = {() => window.location.reload()}>change map</button>
+      <div className = "game_data">remain dots: {pacDots.length}</div>
+      <button className = "change_map_button" onClick = {() => window.location.reload()}>{newGame}</button>
       {movementButtons}
       
     </div>
