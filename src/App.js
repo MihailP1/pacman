@@ -197,8 +197,8 @@ function Game(){
         
         
         board[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}>
-          <div className = "pacman_eye"></div>
-          <div className = "pacman_mouth"></div>
+          <div className = "pacman_eye right_eye"></div>
+          <div className = "pacman_mouth right_mouth"></div>
         </div>;
 
         function createGhost(ghostIndex){
@@ -336,10 +336,38 @@ function Game(){
 
           
           squares[prevPacmanIndex] = <div key={prevPacmanIndex}></div>;
-          squares[currentPacmanIndex] = <div className="pac-man" key={currentPacmanIndex}>
-            <div className = "pacman_eye"></div>
-            <div className = "pacman_mouth"></div>
-          </div>;
+          if(currentPacmanIndex - prevPacmanIndex === 1) {
+            squares[currentPacmanIndex] = 
+            <div className="pac-man" key={currentPacmanIndex}>
+              <div className = "pacman_eye right_eye"></div>
+              <div className = "pacman_mouth right_mouth"></div>
+            </div>;
+          } else if(currentPacmanIndex - prevPacmanIndex === -1) {
+            squares[currentPacmanIndex] = 
+            <div className="pac-man" key={currentPacmanIndex}>
+              <div className = "pacman_eye left_eye"></div>
+              <div className = "pacman_mouth left_mouth"></div>
+            </div>;
+          } else if(currentPacmanIndex - prevPacmanIndex === 28) {
+            squares[currentPacmanIndex] = 
+            <div className="pac-man" key={currentPacmanIndex}>
+              <div className = "pacman_eye down_eye"></div>
+              <div className = "pacman_mouth down_mouth"></div>
+            </div>;
+          } else if(currentPacmanIndex - prevPacmanIndex === -28) {
+            squares[currentPacmanIndex] = 
+            <div className="pac-man" key={currentPacmanIndex}>
+              <div className = "pacman_eye up_eye"></div>
+              <div className = "pacman_mouth up_mouth"></div>
+            </div>;
+          } else if(prevPacmanIndex === undefined) {
+            squares[currentPacmanIndex] = 
+            <div className="pac-man" key={currentPacmanIndex}>
+              <div className = "pacman_eye right_eye"></div>
+              <div className = "pacman_mouth right_mouth"></div>
+            </div>;
+          }
+          
           
           setSquares(squares);
         }

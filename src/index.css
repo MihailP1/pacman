@@ -66,24 +66,58 @@ h1 {
   width: 4px;
 	height: 4px;
 	border-radius: 50%;
-  top: 10%;
-  right: 40%;
+  
   background: #000;
 
+}
+.pac-man .right_eye {
+  top: 10%;
+  right: 40%;
+}
+.pac-man .left_eye {
+  top: 10%;
+  left: 40%;
+}
+.pac-man .down_eye {
+  top: 40%;
+  right: 10%;
+}
+.pac-man .up_eye {
+  bottom: 40%;
+  left: 10%;
 }
 .pac-man .pacman_mouth{
   box-sizing: border-box;
   position: absolute;
   width: 100%;
   height: 100%;
-  clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
-  animation-name: eat;
+  
   animation-duration: 0.7s;
   animation-iteration-count: infinite;
   background: #000;
 
 }
-@keyframes eat {
+.pac-man .right_mouth {
+  clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  animation-name: right_eat;
+  
+}
+.pac-man .left_mouth {
+  clip-path: polygon(0% 74%, 56% 52%, 0% 21%);
+  animation-name: left_eat;
+  
+}
+.pac-man .down_mouth {
+  clip-path: polygon(21% 100%, 48% 44%, 74% 100%);
+  animation-name: down_eat;
+  
+}
+.pac-man .up_mouth {
+  clip-path: polygon(74% 0%, 52% 56%, 21% 0%);
+  animation-name: up_eat;
+  
+}
+@keyframes right_eat {
   0% {
     clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
   }
@@ -101,6 +135,66 @@ h1 {
   
   100% {
    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+}
+@keyframes left_eat {
+  0% {
+    clip-path: polygon(0% 74%, 56% 52%, 0% 21%);
+  }
+  25% {
+    clip-path: polygon(0% 60%, 56% 52%, 0% 40%);
+  }
+  
+  50% {
+    clip-path: polygon(0% 50%, 56% 52%, 0% 50%);
+  }
+  
+  75% {
+   clip-path: polygon(0% 59%, 56% 52%, 0% 35%);
+  }
+  
+  100% {
+   clip-path: polygon(0% 74%, 56% 52%, 0% 21%);
+  }
+}
+@keyframes down_eat {
+  0% {
+    clip-path: polygon(21% 100%, 48% 44%, 74% 100%);
+  }
+  25% {
+    clip-path: polygon(40% 100%, 48% 44%, 60% 100%);
+  }
+  
+  50% {
+    clip-path: polygon(50% 100%, 48% 44%, 50% 100%);
+  }
+  
+  75% {
+   clip-path: polygon(35% 100%, 48% 44%, 59% 100%);
+  }
+  
+  100% {
+   clip-path: polygon(21% 100%, 48% 44%, 74% 100%);
+  }
+}
+@keyframes up_eat {
+  0% {
+    clip-path: polygon(74% 0%, 52% 56%, 21% 0%);
+  }
+  25% {
+    clip-path: polygon(60% 0%, 52% 56%, 40% 0%);
+  }
+  
+  50% {
+    clip-path: polygon(50% 0%, 52% 56%, 50% 0%);
+  }
+  
+  75% {
+   clip-path: polygon(59% 0%, 52% 56%, 35% 0%);
+  }
+  
+  100% {
+   clip-path: polygon(74% 0%, 52% 56%, 21% 0%);
   }
 }
 .ghost {
@@ -171,7 +265,6 @@ code {
     width: 2px;
     height: 2px;
     
-  
   }
   
   .ghost .left_eye {  
