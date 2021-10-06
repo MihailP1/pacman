@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/pacman/static/css/main.da2d42cd.chunk.css",
-    "main.js": "/pacman/static/js/main.a00aacef.chunk.js",
-    "main.js.map": "/pacman/static/js/main.a00aacef.chunk.js.map",
+    "main.css": "/pacman/static/css/main.095907bd.chunk.css",
+    "main.js": "/pacman/static/js/main.ba80843c.chunk.js",
+    "main.js.map": "/pacman/static/js/main.ba80843c.chunk.js.map",
     "runtime-main.js": "/pacman/static/js/runtime-main.65542f52.js",
     "runtime-main.js.map": "/pacman/static/js/runtime-main.65542f52.js.map",
     "static/js/2.f1c43ada.chunk.js": "/pacman/static/js/2.f1c43ada.chunk.js",
@@ -10,14 +10,14 @@
     "static/js/3.4e6fa772.chunk.js": "/pacman/static/js/3.4e6fa772.chunk.js",
     "static/js/3.4e6fa772.chunk.js.map": "/pacman/static/js/3.4e6fa772.chunk.js.map",
     "index.html": "/pacman/index.html",
-    "static/css/main.da2d42cd.chunk.css.map": "/pacman/static/css/main.da2d42cd.chunk.css.map",
+    "static/css/main.095907bd.chunk.css.map": "/pacman/static/css/main.095907bd.chunk.css.map",
     "static/js/2.f1c43ada.chunk.js.LICENSE.txt": "/pacman/static/js/2.f1c43ada.chunk.js.LICENSE.txt",
     "static/media/logo.6ce24c58.svg": "/pacman/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.65542f52.js",
     "static/js/2.f1c43ada.chunk.js",
-    "static/css/main.da2d42cd.chunk.css",
-    "static/js/main.a00aacef.chunk.js"
+    "static/css/main.095907bd.chunk.css",
+    "static/js/main.ba80843c.chunk.js"
   ]
 }

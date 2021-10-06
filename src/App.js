@@ -25,7 +25,6 @@ function Game(){
 
   const [ghost1Index, setGhost1Index] = useState();
   const [ghost1PrevIndex, setGhost1PrevIndex] = useState()
-  
   const [ghost1Direction, setGhost1Direction] = useState(1); 
   const [stepsToChangeGhost1, setStepsToChangeGhost1] = useState(3);
   const [ghost1Steps, setGhost1Steps] = useState(0);
@@ -33,21 +32,18 @@ function Game(){
 
   const [ghost2Index, setGhost2Index] = useState();
   const [ghost2PrevIndex, setGhost2PrevIndex] = useState()
- 
   const [ghost2Direction, setGhost2Direction] = useState(1); 
   const [stepsToChangeGhost2, setStepsToChangeGhost2] = useState(3);
   const [ghost2Steps, setGhost2Steps] = useState(0);
 
   const [ghost3Index, setGhost3Index] = useState();
   const [ghost3PrevIndex, setGhost3PrevIndex] = useState()
- 
   const [ghost3Direction, setGhost3Direction] = useState(1); 
   const [stepsToChangeGhost3, setStepsToChangeGhost3] = useState(3);
   const [ghost3Steps, setGhost3Steps] = useState(0);
 
   const [ghost4Index, setGhost4Index] = useState();
   const [ghost4PrevIndex, setGhost4PrevIndex] = useState()
-  
   const [ghost4Direction, setGhost4Direction] = useState(1); 
   const [stepsToChangeGhost4, setStepsToChangeGhost4] = useState(3);
   const [ghost4Steps, setGhost4Steps] = useState(0);
@@ -634,10 +630,7 @@ function Game(){
     } 
     
   });
-
-  
- 
-      
+    
   
   const handlerPacMovement = function movePacman(e) {
 
@@ -705,7 +698,7 @@ function Game(){
   return (
     <div className = "game">
       {game}
-      <div className = "game_data">remain dots: {pacDots.length}</div>
+      <div className = "game_data">dots left: {pacDots.length}</div>
       <button className = "change_map_button" onClick = {() => window.location.reload()}>{newGame}</button>
       {movementButtons}
       
